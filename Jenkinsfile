@@ -7,16 +7,16 @@ pipeline {
     SSH_CREDENTIALS_ID = 'databases-ssh-key'
   }
   stages {
+    stage('Test Connection via SSH') {
+      steps {
+    node {
     def remote = [:]
     remote.name = "jenkins-agent-1"
     remote.host = DATABASES_HOST
     remote.allowAnyHosts = true
-    node {
       withCredentials([sshUserPrivateKey(credentialsId: "${SSH_CREDENTIALS_ID}", keyFileVariable: 'SSH_KEY', usernameVariable: 'SSH_USER')]) {
         remote.user = SSH_USER
         remote.identityFile = SSH_KEY
-        stage('Test Connection via SSH') {
-          steps {
             sshCommand remote: remote, command: """
               echo "SSH Connection Successful"
             """
