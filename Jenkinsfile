@@ -7,21 +7,22 @@ pipeline {
     SSH_CREDENTIALS_ID = 'databases-ssh-key'
   }
   stages {
-    stage('Test Connection via PING') {
-      steps {
-        script {
-          sh 'ping -c 1 $DATABASES_HOST'
-        }
-      }
-    }
     stage('Test Connection via SSH') {
       steps {
-        script {
-          sshCommand remote: [host: "${DATABASES_HOST}", credentialsId: "${SSH_CREDENTIALS_ID}"], command: """
-            echo "SSH Connection Successful"
-          """
-        }
+        sshCommand remote: [host: "${DATABASES_HOST}", credentialsId: "${SSH_CREDENTIALS_ID}"], command: """
+          echo "SSH Connection Successful"
+        """
       }
     }
+    stage('Copy Migration Files') {
+      steps {
+        sshCommand remote: [host: "${DATABASES_HOST}", credentialsId: "${SSH_CREDENTIALS_ID}"], command: """
+            mkdir -p /tmp/migrations
+        """
+        sh """
+            scp -r ${MIGRATION_DIR}/* ${DATABASES_HOST}:/tmp/migrations
+        """
+      }
+  }
   }
 }
