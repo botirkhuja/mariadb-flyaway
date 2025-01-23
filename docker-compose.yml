@@ -1,0 +1,21 @@
+version: '3.8'
+
+name: databases-prod
+services:
+  db:
+    image: mariadb:latest
+    container_name: mariadb-container
+    restart: unless-stopped
+    env_file: .env
+    ports:
+      - '3306:3306'
+    volumes:
+      - ./mariadb:/var/lib/mysql
+  adminer:
+      image: adminer
+      restart: always
+      ports:
+          - 8080:8080 
+# run the following command to start the container: docker-compose up --build -d
+
+
