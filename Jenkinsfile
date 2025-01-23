@@ -8,8 +8,8 @@ pipeline {
   }
   stages {
     stage('Test Connection via SSH') {
-      steps {
-        sshCommand remote: [host: "${DATABASES_HOST}", credentialsId: "${SSH_CREDENTIALS_ID}"], command: """
+      withCredentials([sshUserPrivateKey(credentialsId: "${SSH_CREDENTIALS_ID}", keyFileVariable: 'SSH_KEY', usernameVariable: 'SSH_USER')]) {
+        sshCommand remote: [name: 'jenkins-agent-1', host: "${DATABASES_HOST}", allowAnyHosts: true, user: "${SSH_USER}", credentialsId: "${SSH_KEY}"], command: """
           echo "SSH Connection Successful"
         """
       }
