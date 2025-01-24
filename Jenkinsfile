@@ -30,17 +30,15 @@ pipeline {
       }
     }
     stage('Copy Migration Files') {
-      environment {
-        remote = [:]
-        remote.name = 'databases'
-        remote.host = DATABASES_HOST
-      }
       steps {
         withCredentials([sshUserPrivateKey(credentialsId: SSH_CREDENTIALS_ID, keyFileVariable: 'SSH_KEY', usernameVariable: 'SSH_USER')]) {
-          remote.user = SSH_USER
-          remote.identityFile = SSH_KEY
-          remote.allowAnyHosts = true
-          sshCommand remote: remote, command: """
+          sshCommand remote: [
+            name: 'databases',
+            host: DATABASES_HOST,
+            user: SSH_USER,
+            identityFile: SSH_KEY
+            allowAnyHosts: true
+          ], command: """
             mkdir -p /tmp/migrations
           """
         }
