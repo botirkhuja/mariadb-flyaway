@@ -27,6 +27,7 @@ pipeline {
           sshagent(credentials: [SSH_CREDENTIALS_ID]) {
             sh '''
               scp -r ${MIGRATION_DIR} ${SSH_USER}@${DATABASES_HOST}:/tmp
+              scp build.sh ${SSH_USER}@${DATABASES_HOST}:/tmp
             '''
           }
           // sshCommand remote: [name: 'databases', host: DATABASES_HOST, user: SSH_USER, identityFile: SSH_KEY, allowAnyHosts: true], command: """
@@ -37,20 +38,21 @@ pipeline {
         }
       }
     }
-    // stage('Create Migrations Table') {
-    //   steps {
-    //     // sshagent(credentials: [SSH_CREDENTIALS_ID]) {
-    //     //   sh '''
-    //     //     [ -d ~/.ssh ] || mkdir ~/.ssh && chmod 0700 ~/.ssh
-    //     //     ssh-keyscan -t rsa,dsa ${DATABASES_HOST} >> ~/.ssh/known_hosts
-    //     //     ssh user@${DATABASES_HOST}
-    //     //   '''
-    //     // }
-    //     withCredentials([sshUserPrivateKey(credentialsId: SSH_CREDENTIALS_ID, keyFileVariable: 'SSH_KEY', usernameVariable: 'SSH_USER')]) {
+    stage('Create Migrations Table') {
+      steps {
+        sshagent(credentials: [SSH_CREDENTIALS_ID]) {
+          sh '''
+            ssh jenkins@${DATABASES_HOST} <<EOF
+            cd /tmp
+            chmod +x build.sh
+            ./build.sh
+          '''
+        }
+        // withCredentials([sshUserPrivateKey(credentialsId: SSH_CREDENTIALS_ID, keyFileVariable: 'SSH_KEY', usernameVariable: 'SSH_USER')]) {
          
-    //       sshScript remote: [name: 'databases', host: DATABASES_HOST, user: SSH_USER, identityFile: SSH_KEY, allowAnyHosts: true, agent: true], script: "build.sh"
-    //     }
-    //   }
-    // }
+        //   sshScript remote: [name: 'databases', host: DATABASES_HOST, user: SSH_USER, identityFile: SSH_KEY, allowAnyHosts: true, agent: true], script: "build.sh"
+        // }
+      }
+    }
   }
 }
