@@ -26,6 +26,7 @@ node {
       }
 
       stage('Copy Migration Files') {
+        sshRemove remote: remote, path: '/tmp'
         sshPut remote: remote, from: "${MIGRATION_DIR}", into: '/tmp'
         sshPut remote: remote, from: "build.sh", into: '/tmp'
       }
@@ -43,11 +44,5 @@ node {
       // Handle any failures
       echo "Pipeline failed: ${e.message}"
       throw e // Rethrow to mark the build as failed
-  }
-
-  post {
-    failure {
-        sleep 5
-    }
   }
 }
