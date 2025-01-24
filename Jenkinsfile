@@ -32,13 +32,7 @@ pipeline {
     stage('Copy Migration Files') {
       steps {
         withCredentials([sshUserPrivateKey(credentialsId: SSH_CREDENTIALS_ID, keyFileVariable: 'SSH_KEY', usernameVariable: 'SSH_USER')]) {
-          sshCommand remote: [
-            name: 'databases',
-            host: DATABASES_HOST,
-            user: SSH_USER,
-            identityFile: SSH_KEY
-            allowAnyHosts: true
-          ], command: """
+          sshCommand remote: [name: 'databases', host: DATABASES_HOST, user: SSH_USER, identityFile: SSH_KEY, allowAnyHosts: true], command: """
             mkdir -p /tmp/migrations
           """
         }
