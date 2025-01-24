@@ -12,7 +12,7 @@ pipeline {
         withCredentials([sshUserPrivateKey(credentialsId: SSH_CREDENTIALS_ID, keyFileVariable: 'SSH_KEY', usernameVariable: 'SSH_USER')]) {
           script {
             def remote = [:]
-            remote.name = 'jenkins-agent-1'
+            remote.name = 'jenkins'
             remote.host = DATABASES_HOST
             remote.user = SSH_USER
             remote.identityFile = SSH_KEY
