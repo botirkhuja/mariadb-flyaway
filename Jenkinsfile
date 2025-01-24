@@ -50,6 +50,7 @@ pipeline {
             export DB_CREDENTIALS_PSW=${DB_CREDENTIALS_PSW}
             chmod +x build.sh
             ./build.sh
+            EOF
           '''
         }
         // withCredentials([sshUserPrivateKey(credentialsId: SSH_CREDENTIALS_ID, keyFileVariable: 'SSH_KEY', usernameVariable: 'SSH_USER')]) {
