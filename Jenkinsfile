@@ -9,11 +9,12 @@ pipeline {
   stages {
     stage('Test Connection via SSH') {
       steps {
-          script {
-            def remote = [:]
-            remote.name = 'jenkins'
-            remote.host = DATABASES_HOST
-        withCredentials([sshUserPrivateKey(credentialsId: SSH_CREDENTIALS_ID, keyFileVariable: 'SSH_KEY', usernameVariable: 'SSH_USER')]) {
+        script {
+          def remote = [:]
+          remote.name = 'databases'
+          remote.host = DATABASES_HOST
+
+          withCredentials([sshUserPrivateKey(credentialsId: SSH_CREDENTIALS_ID, keyFileVariable: 'SSH_KEY', usernameVariable: 'SSH_USER')]) {
             remote.user = SSH_USER
             remote.identityFile = SSH_KEY
             remote.allowAnyHosts = true
@@ -29,13 +30,26 @@ pipeline {
       }
     }
     stage('Copy Migration Files') {
+      environment {
+        remote = [:]
+        remote.name = 'databases'
+        remote.host = DATABASES_HOST
+      }
       steps {
-        sshCommand remote: [host: "${DATABASES_HOST}", credentialsId: "${SSH_CREDENTIALS_ID}"], command: """
+        withCredentials([sshUserPrivateKey(credentialsId: SSH_CREDENTIALS_ID, keyFileVariable: 'SSH_KEY', usernameVariable: 'SSH_USER')]) {
+          remote.user = SSH_USER
+          remote.identityFile = SSH_KEY
+          remote.allowAnyHosts = true
+          sshCommand remote: remote, command: """
             mkdir -p /tmp/migrations
-        """
-        sh """
-            scp -r ${MIGRATION_DIR}/* ${DATABASES_HOST}:/tmp/migrations
-        """
+          """
+        }
+        // sshCommand remote: [host: "${DATABASES_HOST}", credentialsId: "${SSH_CREDENTIALS_ID}"], command: """
+        //     mkdir -p /tmp/migrations
+        // """
+        // sh """
+        //     scp -r ${MIGRATION_DIR}/* ${DATABASES_HOST}:/tmp/migrations
+        // """
       }
   }
   }
