@@ -3,7 +3,7 @@
 mariadbAddress=`docker inspect -f '{{range .NetworkSettings.Networks}}{{.IPAddress}}{{end}}' ${DB_CONTAINER_NAME}` 
 echo "MariaDB Address: ${mariadbAddress}"
 
-echo \$DB_CREDENTIALS_USR
+echo "${DB_CREDENTIALS_USR}"
 echo $DB_CREDENTIALS_PSW
 
 mysql -h ${mariadbAddress} -u ${DB_CREDENTIALS_USR} -proot -e "

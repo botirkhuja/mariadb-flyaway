@@ -45,10 +45,11 @@ pipeline {
           sh '''#!/bin/bash
             ssh jenkins@${DATABASES_HOST} <<EOF
             cd /tmp
-            echo $DB_CREDENTIALS_USR
-            echo "pwd ${DB_CREDENTIALS_PSW}"
-            export DB_CONTAINER_NAME=${DB_CONTAINER_NAME} 
-            echo `ip a`
+            export DB_CONTAINER_NAME=${DB_CONTAINER_NAME}
+            export DB_CREDENTIALS_USR=${DB_CREDENTIALS_USR}
+            export DB_CREDENTIALS_PSW=${DB_CREDENTIALS_PSW}
+            chmod +x build.sh
+            ./build.sh
           '''
         }
         // withCredentials([sshUserPrivateKey(credentialsId: SSH_CREDENTIALS_ID, keyFileVariable: 'SSH_KEY', usernameVariable: 'SSH_USER')]) {
