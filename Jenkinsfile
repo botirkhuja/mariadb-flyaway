@@ -45,9 +45,11 @@ pipeline {
           sh '''
             ssh jenkins@${DATABASES_HOST} <<EOF
             cd /tmp
-            export DB_CONTAINER_NAME=${DB_CONTAINER_NAME} 
-            chmod +x build.sh
-            ./build.sh
+            echo $DB_CREDENTIALS_USR
+            echo "pwd ${DB_CREDENTIALS_PSW}"
+            export DB_CONTAINER_NAME=${DB_CONTAINER_NAME}
+            mariadbAddress=`docker inspect -f '{{range .NetworkSettings.Networks}}{{.IPAddress}}{{end}}' ${DB_CONTAINER_NAME}`
+            echo "MariaDB Address: ${mariadbAddress}"
           '''
         }
         // withCredentials([sshUserPrivateKey(credentialsId: SSH_CREDENTIALS_ID, keyFileVariable: 'SSH_KEY', usernameVariable: 'SSH_USER')]) {
