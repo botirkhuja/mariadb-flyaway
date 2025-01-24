@@ -26,10 +26,8 @@ node {
       }
 
       stage('Copy Migration Files') {
-        def commanResult = sshPut remote: remote, from: "${MIGRATION_DIR}", into: '/tmp'
-        echo "Command Result: ${commanResult}"
-        // commanResult = sshPut remote: remote, from: "build.sh", into: '/tmp'
-        // echo "Command Result: ${commanResult}"
+        sshPut remote: remote, from: "${MIGRATION_DIR}", into: '/tmp'
+        sshPut remote: remote, from: "build.sh", into: '/tmp'
       }
 
       stage('Create Migrations Table') {
@@ -42,8 +40,14 @@ node {
       }
     }
   }  catch (Exception e) {
-        // Handle any failures
-        echo "Pipeline failed: ${e.message}"
-        throw e // Rethrow to mark the build as failed
+      // Handle any failures
+      echo "Pipeline failed: ${e.message}"
+      throw e // Rethrow to mark the build as failed
+  }
+
+  post {
+    failure {
+        sleep 5
     }
+  }
 }
