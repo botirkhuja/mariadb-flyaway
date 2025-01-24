@@ -18,7 +18,6 @@ node {
 
       stage('Test Connection via SSH') {
         def commanResult = sshCommand remote:  remote, command: """
-          rm -rf ~/workdir/tmp 
           mkdir -p ~/workdir/tmp/migrations
           echo "Connection to ${DATABASES_HOST} successful"
         """
