@@ -47,9 +47,9 @@ pipeline {
             cd /tmp
             echo $DB_CREDENTIALS_USR
             echo "pwd ${DB_CREDENTIALS_PSW}"
-            export DB_CONTAINER_NAME=${DB_CONTAINER_NAME}
-            mariadbAddress=`docker inspect -f '{{range .NetworkSettings.Networks}}{{.IPAddress}}{{end}}' ${DB_CONTAINER_NAME}`
-            echo "MariaDB Address: ${mariadbAddress}"
+            export DB_CONTAINER_NAME=${DB_CONTAINER_NAME} 
+            chmod +x build.sh
+            ./build.sh
           '''
         }
         // withCredentials([sshUserPrivateKey(credentialsId: SSH_CREDENTIALS_ID, keyFileVariable: 'SSH_KEY', usernameVariable: 'SSH_USER')]) {
