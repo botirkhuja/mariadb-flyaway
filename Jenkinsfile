@@ -18,6 +18,7 @@ pipeline {
               echo "SSH Connection Successful"
               ls -la 
           '''
+        }
       }
       // steps {
       //   // script {
