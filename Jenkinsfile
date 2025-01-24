@@ -14,7 +14,7 @@ pipeline {
         //   remote.name = 'databases'
         //   remote.host = DATABASES_HOST
 
-        //   withCredentials([sshUserPrivateKey(credentialsId: SSH_CREDENTIALS_ID, keyFileVariable: 'SSH_KEY', usernameVariable: 'SSH_USER')]) {
+        withCredentials([sshUserPrivateKey(credentialsId: SSH_CREDENTIALS_ID, keyFileVariable: 'SSH_KEY', usernameVariable: 'SSH_USER')]) {
         //     remote.user = SSH_USER
         //     remote.identityFile = SSH_KEY
         //     remote.allowAnyHosts = true
@@ -36,14 +36,14 @@ pipeline {
             mkdir -p /tmp/migrations
           """
           sshPut remote: [name: 'databases', host: DATABASES_HOST, user: SSH_USER, identityFile: SSH_KEY, allowAnyHosts: true], from: "${MIGRATION_DIR}/*", into: '/tmp/migrations'
+          // sshCommand remote: [host: "${DATABASES_HOST}", credentialsId: "${SSH_CREDENTIALS_ID}"], command: """
+          //     mkdir -p /tmp/migrations
+          // """
+          // sh """
+          //     scp -r ${MIGRATION_DIR}/* ${DATABASES_HOST}:/tmp/migrations
+          // """
         }
-        // sshCommand remote: [host: "${DATABASES_HOST}", credentialsId: "${SSH_CREDENTIALS_ID}"], command: """
-        //     mkdir -p /tmp/migrations
-        // """
-        // sh """
-        //     scp -r ${MIGRATION_DIR}/* ${DATABASES_HOST}:/tmp/migrations
-        // """
       }
-  }
+    }
   }
 }
