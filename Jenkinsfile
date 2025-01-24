@@ -9,16 +9,16 @@ pipeline {
   stages {
     stage('Test Connection via SSH') {
       steps {
-        withCredentials([sshUserPrivateKey(credentialsId: SSH_CREDENTIALS_ID, keyFileVariable: 'SSH_KEY', usernameVariable: 'SSH_USER')]) {
           script {
             def remote = [:]
             remote.name = 'jenkins'
             remote.host = DATABASES_HOST
+        withCredentials([sshUserPrivateKey(credentialsId: SSH_CREDENTIALS_ID, keyFileVariable: 'SSH_KEY', usernameVariable: 'SSH_USER')]) {
             remote.user = SSH_USER
             remote.identityFile = SSH_KEY
             remote.allowAnyHosts = true
             sshCommand remote: remote, command: """
-              echo "SSH Connection Successful"
+              echo "SSH Connection Successful" && ls -la
             """
           }
           // sshCommand remote: [name: 'jenkins', host: DATABASES_HOST, allowAnyHosts: true, user: SSH_USER, identityFile: SSH_KEY], command: """
