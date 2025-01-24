@@ -48,7 +48,7 @@ pipeline {
             export DB_CONTAINER_NAME=${DB_CONTAINER_NAME}
             export DB_CREDENTIALS_USR=${DB_CREDENTIALS_USR}
             export DB_CREDENTIALS_PSW=${DB_CREDENTIALS_PSW}
-            mysql -uroot -p${DB_CREDENTIALS_PSW} -h $(docker inspect --format '{{ .NetworkSettings.IPAddress }}' ${DB_CONTAINER_NAME}) -e "CREATE DATABASE IF NOT EXISTS db_migrations;"
+            mysql -uroot -p${DB_CREDENTIALS_PSW} -h $(docker inspect --format '{{ .NetworkSettings.IPAddress }}' prod-mariadb -e "CREATE DATABASE IF NOT EXISTS db_migrations;"
           '''
         }
         // withCredentials([sshUserPrivateKey(credentialsId: SSH_CREDENTIALS_ID, keyFileVariable: 'SSH_KEY', usernameVariable: 'SSH_USER')]) {
