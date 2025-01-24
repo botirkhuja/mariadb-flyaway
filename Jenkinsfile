@@ -44,6 +44,7 @@ pipeline {
           sh '''
             ssh jenkins@${DATABASES_HOST} <<EOF
             cd /tmp
+            export DB_CONTAINER_NAME=${DB_CONTAINER_NAME} 
             chmod +x build.sh
             ./build.sh
           '''
