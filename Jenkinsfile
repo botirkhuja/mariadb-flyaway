@@ -2,7 +2,7 @@ pipeline {
   agent any
   environment {
     DATABASES_HOST = '10.10.10.101'
-    MIGRATION_DIR = './migrations'
+    MIGRATION_DIR = 'migrations'
     DOCKER_IMAGE = 'mariadb:latest'
     SSH_CREDENTIALS_ID = 'databases-ssh-key'
   }
@@ -32,7 +32,8 @@ pipeline {
     stage('Copy Migration Files') {
       steps {
         // checkout scm
-        // sh 'ls -la'
+        sh 'pwd'
+        sh 'ls -la'
         withCredentials([sshUserPrivateKey(credentialsId: SSH_CREDENTIALS_ID, keyFileVariable: 'SSH_KEY', usernameVariable: 'SSH_USER')]) {
           sshCommand remote: [name: 'databases', host: DATABASES_HOST, user: SSH_USER, identityFile: SSH_KEY, allowAnyHosts: true], command: """
             mkdir -p /tmp/migrations
