@@ -46,7 +46,7 @@ pipeline {
          
           sshCommand remote: [name: 'databases', host: DATABASES_HOST, user: SSH_USER, identityFile: SSH_KEY, allowAnyHosts: true], command: """
             mariadbAddress=\$(docker inspect -f '{{range .NetworkSettings.Networks}}{{.IPAddress}}{{end}}' ${DB_CONTAINER_NAME})
-            mysql -h ${mariadbAddress} -u root -proot -e "
+            mysql -h \$mariadbAddress -u root -proot -e "
               CREATE DATABASE IF NOT EXISTS db_migrations;
               USE db_migrations;
               CREATE TABLE IF NOT EXISTS schema_migrations (
