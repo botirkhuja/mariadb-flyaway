@@ -15,7 +15,7 @@ node {
       remote.user = SSH_USER
       remote.identityFile = SSH_KEY
       // remote.failOnError = false
-      remote.fileTransfer = 'SCP'
+      remote.fileTransfer = 'scp'
 
       stage('Test Connection via SSH') {
         def commanResult = sshCommand remote:  remote, command: """
