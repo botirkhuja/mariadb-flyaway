@@ -25,8 +25,8 @@ node {
       }
 
       stage('Copy Migration Files') {
-        sshPut remote: remote, from: "${MIGRATION_DIR}", into: '~/workdir/tmp'
-        sshPut remote: remote, from: "build.sh", into: '~/workdir/tmp'
+        sshPut remote: remote, from: "${MIGRATION_DIR}", into: '/home/jenkins/workdir/tmp'
+        sshPut remote: remote, from: "build.sh", into: '/home/jenkins/workdir/tmp'
       }
 
       stage('Create Migrations Table') {
