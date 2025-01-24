@@ -1,3 +1,5 @@
+#!/bin/bash
+
 mariadbAddress = docker inspect -f '{{range .NetworkSettings.Networks}}{{.IPAddress}}{{end}}' ${DB_CONTAINER_NAME} 
 echo "MariaDB Address: ${mariadbAddress}"
 
