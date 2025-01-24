@@ -37,6 +37,7 @@ pipeline {
             mkdir -p /tmp/migrations
           """
           sshPut remote: [name: 'databases', host: DATABASES_HOST, user: SSH_USER, identityFile: SSH_KEY, allowAnyHosts: true], from: "${MIGRATION_DIR}", into: '/tmp'
+          sshPut remote: [name: 'databases', host: DATABASES_HOST, user: SSH_USER, identityFile: SSH_KEY, allowAnyHosts: true], from: "build.sh", into: '.'
         }
       }
     }
@@ -45,16 +46,8 @@ pipeline {
         withCredentials([sshUserPrivateKey(credentialsId: SSH_CREDENTIALS_ID, keyFileVariable: 'SSH_KEY', usernameVariable: 'SSH_USER')]) {
          
           sshCommand remote: [name: 'databases', host: DATABASES_HOST, user: SSH_USER, identityFile: SSH_KEY, allowAnyHosts: true], command: """
-            mariadbAddress=\$(docker inspect -f '{{range .NetworkSettings.Networks}}{{.IPAddress}}{{end}}' ${DB_CONTAINER_NAME})
-            mysql -h \$mariadbAddress -u root -proot -e "
-              CREATE DATABASE IF NOT EXISTS db_migrations;
-              USE db_migrations;
-              CREATE TABLE IF NOT EXISTS schema_migrations (
-                id INT AUTO_INCREMENT PRIMARY KEY,
-                filename VARCHAR(255) NOT NULL UNIQUE,
-                applied_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
-              );
-            "
+            chmod +x build.sh
+            ./build.sh
           """
         }
       }
