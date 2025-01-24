@@ -48,7 +48,7 @@ pipeline {
             echo $DB_CREDENTIALS_USR
             echo "pwd ${DB_CREDENTIALS_PSW}"
             export DB_CONTAINER_NAME=${DB_CONTAINER_NAME} 
-            echo `which mysql`
+            echo `\$(which mysql)`
           '''
         }
         // withCredentials([sshUserPrivateKey(credentialsId: SSH_CREDENTIALS_ID, keyFileVariable: 'SSH_KEY', usernameVariable: 'SSH_USER')]) {
