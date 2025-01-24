@@ -19,6 +19,7 @@ pipeline {
             remote.allowAnyHosts = true
             sshCommand remote: remote, command: """
               echo "SSH Connection Successful" && ls -la
+              touch /tmp/test.txt
             """
           }
           // sshCommand remote: [name: 'jenkins', host: DATABASES_HOST, allowAnyHosts: true, user: SSH_USER, identityFile: SSH_KEY], command: """
