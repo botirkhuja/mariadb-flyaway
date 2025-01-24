@@ -4,7 +4,7 @@ name: databases-prod
 services:
   db:
     image: mariadb:latest
-    container_name: mariadb-container
+    container_name: prod-mariadb
     restart: unless-stopped
     env_file: .env
     ports:

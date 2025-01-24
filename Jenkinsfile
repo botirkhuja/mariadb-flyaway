@@ -5,6 +5,7 @@ pipeline {
     MIGRATION_DIR = 'migrations'
     DOCKER_IMAGE = 'mariadb:latest'
     SSH_CREDENTIALS_ID = 'databases-ssh-key'
+    DB_CONTAINER_NAME = 'prod-mariadb'
   }
   stages {
     stage('Test Connection via SSH') {
