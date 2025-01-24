@@ -3,7 +3,7 @@
 mariadbAddress=`docker inspect -f '{{range .NetworkSettings.Networks}}{{.IPAddress}}{{end}}' ${DB_CONTAINER_NAME}` 
 echo "MariaDB Address: ${mariadbAddress}"
 
-mysql -h ${mariadbAddress} --user=${DB_CREDENTIALS_USR} root --password=${DB_CREDENTIALS_PSW} -e "
+mysql -h ${mariadbAddress} -u ${DB_CREDENTIALS_USR} -p${DB_CREDENTIALS_PSW} -e "
               CREATE DATABASE IF NOT EXISTS db_migrations;
               USE db_migrations;
               CREATE TABLE IF NOT EXISTS schema_migrations (
