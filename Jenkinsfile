@@ -24,9 +24,11 @@ pipeline {
     stage('Copy Migration Files') {
       steps {
         withCredentials([sshUserPrivateKey(credentialsId: SSH_CREDENTIALS_ID, keyFileVariable: 'SSH_KEY', usernameVariable: 'SSH_USER')]) {
-          sh '''
-            scp -r ${MIGRATION_DIR} ${SSH_USER}@${DATABASES_HOST}:/tmp
-          '''
+          sshagent(credentials: [SSH_CREDENTIALS_ID]) {
+            sh '''
+              scp -r ${MIGRATION_DIR} ${SSH_USER}@${DATABASES_HOST}:/tmp
+            '''
+          }
           // sshCommand remote: [name: 'databases', host: DATABASES_HOST, user: SSH_USER, identityFile: SSH_KEY, allowAnyHosts: true], command: """
           //   mkdir -p /tmp/migrations
           // """
