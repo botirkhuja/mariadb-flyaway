@@ -49,6 +49,7 @@ pipeline {
               export DB_CREDENTIALS_USR=${DB_CREDENTIALS_USR}
               export DB_CREDENTIALS_PSW=${DB_CREDENTIALS_PSW}
               docker exec -t ${DB_CONTAINER_NAME} mariadb -u${DB_CREDENTIALS_USR} -p${DB_CREDENTIALS_PSW} -e "CREATE DATABASE IF NOT EXISTS db_migrations;"
+              docker exec -t ${DB_CONTAINER_NAME} mariadb -u${DB_CREDENTIALS_USR} -p${DB_CREDENTIALS_PSW} -e "show databases;"
           '''
         }
         // withCredentials([sshUserPrivateKey(credentialsId: SSH_CREDENTIALS_ID, keyFileVariable: 'SSH_KEY', usernameVariable: 'SSH_USER')]) {
