@@ -18,8 +18,8 @@ node {
 
       stage('Test Connection via SSH') {
         def commanResult = sshCommand remote:  remote, command: """
-          rm -rf ~/tmp 
-          mkdir -p ~/tmp/migrations
+          rm -rf ~/workdir/tmp 
+          mkdir -p ~/workdir/tmp/migrations
           echo "Connection to ${DATABASES_HOST} successful"
         """
         echo "Command Result: ${commanResult}"
@@ -27,13 +27,13 @@ node {
 
       stage('Copy Migration Files') {
         remote.fileTransfer = 'scp'
-        sshPut remote: remote, from: "${MIGRATION_DIR}", into: '~/tmp'
-        sshPut remote: remote, from: "build.sh", into: '~/tmp'
+        sshPut remote: remote, from: "${MIGRATION_DIR}", into: '~/workdir/tmp'
+        sshPut remote: remote, from: "build.sh", into: '~/workdir/tmp'
       }
 
       stage('Create Migrations Table') {
         def commanResult = sshCommand remote: remote, command: """
-          cd ~/tmp
+          cd ~/workdir/tmp
           chmod +x build.sh
           ./build.sh
         """
