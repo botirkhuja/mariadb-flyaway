@@ -43,9 +43,16 @@ pipeline {
     }
     stage('Create Migrations Table') {
       steps {
+        // sshagent(credentials: [SSH_CREDENTIALS_ID]) {
+        //   sh '''
+        //     [ -d ~/.ssh ] || mkdir ~/.ssh && chmod 0700 ~/.ssh
+        //     ssh-keyscan -t rsa,dsa ${DATABASES_HOST} >> ~/.ssh/known_hosts
+        //     ssh user@${DATABASES_HOST}
+        //   '''
+        // }
         withCredentials([sshUserPrivateKey(credentialsId: SSH_CREDENTIALS_ID, keyFileVariable: 'SSH_KEY', usernameVariable: 'SSH_USER')]) {
          
-          sshCommand remote: [name: 'databases', host: DATABASES_HOST, user: SSH_USER, identityFile: SSH_KEY, allowAnyHosts: true], command: """
+          sshCommand remote: [name: 'databases', host: DATABASES_HOST, user: SSH_USER, identityFile: SSH_KEY, allowAnyHosts: true, agent: true], command: """
             chmod +x /tmp/build.sh
             /tmp/build.sh
           """
