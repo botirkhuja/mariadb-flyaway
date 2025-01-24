@@ -6,6 +6,7 @@ pipeline {
     DOCKER_IMAGE = 'mariadb:latest'
     SSH_CREDENTIALS_ID = 'databases-ssh-key'
     DB_CONTAINER_NAME = 'prod-mariadb'
+    DB_CREDENTIALS = credentials('mariadb-credentials')
   }
   stages {
     stage('Test Connection via SSH') {
