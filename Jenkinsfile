@@ -37,7 +37,7 @@ pipeline {
             mkdir -p /tmp/migrations
           """
           sshPut remote: [name: 'databases', host: DATABASES_HOST, user: SSH_USER, identityFile: SSH_KEY, allowAnyHosts: true], from: "${MIGRATION_DIR}", into: '/tmp'
-          sshPut remote: [name: 'databases', host: DATABASES_HOST, user: SSH_USER, identityFile: SSH_KEY, allowAnyHosts: true], from: "build.sh", into: '.'
+          sshPut remote: [name: 'databases', host: DATABASES_HOST, user: SSH_USER, identityFile: SSH_KEY, allowAnyHosts: true], from: "build.sh", into: '/tmp'
         }
       }
     }
@@ -46,8 +46,8 @@ pipeline {
         withCredentials([sshUserPrivateKey(credentialsId: SSH_CREDENTIALS_ID, keyFileVariable: 'SSH_KEY', usernameVariable: 'SSH_USER')]) {
          
           sshCommand remote: [name: 'databases', host: DATABASES_HOST, user: SSH_USER, identityFile: SSH_KEY, allowAnyHosts: true], command: """
-            chmod +x build.sh
-            ./build.sh
+            chmod +x /tmp/build.sh
+            /tmp/build.sh
           """
         }
       }
