@@ -9,18 +9,10 @@ pipeline {
   stages {
     stage('Test Connection via SSH') {
       steps {
-    node {
-    def remote = [:]
-    remote.name = "jenkins-agent-1"
-    remote.host = DATABASES_HOST
-    remote.allowAnyHosts = true
-      withCredentials([sshUserPrivateKey(credentialsId: "${SSH_CREDENTIALS_ID}", keyFileVariable: 'SSH_KEY', usernameVariable: 'SSH_USER')]) {
-        remote.user = SSH_USER
-        remote.identityFile = SSH_KEY
-            sshCommand remote: remote, command: """
-              echo "SSH Connection Successful"
-            """
-          }
+        withCredentials([sshUserPrivateKey(credentialsId: SSH_CREDENTIALS_ID, keyFileVariable: 'SSH_KEY', usernameVariable: 'SSH_USER')]) {
+          sshCommand remote: [name: 'jenkins-agent-1', host: DATABASES_HOST, allowAnyHosts: true, user: SSH_USER, credentialsId: SSH_KEY], command: """
+            echo "SSH Connection Successful"
+          """
         }
       }
     }
