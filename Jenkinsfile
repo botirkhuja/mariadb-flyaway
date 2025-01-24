@@ -11,7 +11,7 @@ pipeline {
       steps {
         withCredentials([sshUserPrivateKey(credentialsId: SSH_CREDENTIALS_ID, keyFileVariable: 'SSH_KEY', usernameVariable: 'SSH_USER')]) {
           sh """
-            ssh -i ${SSH_KEY} ${SSH_USER}@${DATABASES_HOST} echo "SSH Connection Successful"
+            ssh -o StrictHostKeyChecking=no -i ${SSH_KEY} ${SSH_USER}@${DATABASES_HOST} echo "SSH Connection Successful"
           """
           // sshCommand remote: [name: 'jenkins-agent-1', host: DATABASES_HOST, allowAnyHosts: true, user: SSH_USER, credentialsId: SSH_KEY], command: """
           //   echo "SSH Connection Successful"
