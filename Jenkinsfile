@@ -26,7 +26,6 @@ node {
       }
 
       stage('Copy Migration Files') {
-        remote.fileTransfer = 'scp'
         sshPut remote: remote, from: "${MIGRATION_DIR}", into: '~/workdir/tmp'
         sshPut remote: remote, from: "build.sh", into: '~/workdir/tmp'
       }
