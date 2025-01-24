@@ -15,7 +15,6 @@ node {
       remote.user = SSH_USER
       remote.identityFile = SSH_KEY
       // remote.failOnError = false
-      remote.fileTransfer = 'scp'
 
       stage('Test Connection via SSH') {
         def commanResult = sshCommand remote:  remote, command: """
@@ -26,6 +25,7 @@ node {
       }
 
       stage('Copy Migration Files') {
+        remote.fileTransfer = 'scp'
         sshRemove remote: remote, path: '/tmp'
         sshPut remote: remote, from: "${MIGRATION_DIR}", into: '/tmp'
         sshPut remote: remote, from: "build.sh", into: '/tmp'
