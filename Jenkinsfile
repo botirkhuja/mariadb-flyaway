@@ -68,16 +68,8 @@ pipeline {
         sshagent(credentials: [SSH_CREDENTIALS_ID]) {
           sh '''#!/bin/bash
             ssh jenkins@${DATABASES_HOST} <<EOF
-              for file in \$(ls /tmp/migrations/*.sql | sort); do
-                  FILENAME=\$(basename \$file)
-                  APPLIED=\$(docker exec -i ${DB_CONTAINER_NAME} mariadb -u${DB_CREDENTIALS_USR} -p${DB_CREDENTIALS_PSW} -e "SELECT COUNT(*) FROM schema_migrations WHERE filename='\$FILENAME';" | tail -n 1)
-                  if [ "\$APPLIED" -eq "0" ]; then
-                      echo "Applying migration: \$FILENAME"
-                      
-                  else
-                      echo "Migration already applied: \$FILENAME"
-                  fi
-                done
+              cd /tmp/migrations
+              ls -1 | sort
           '''
         }
       }
