@@ -68,10 +68,11 @@ pipeline {
         sshagent(credentials: [SSH_CREDENTIALS_ID]) {
           sh '''#!/bin/bash
             ssh jenkins@${DATABASES_HOST} <<EOF
-              cd /tmp/migrations
+              ls -l /tmp/migrations/*.sql
+              echo "Applying migrations listed above"
               for file in /tmp/migrations/*.sql
               do
-                  FILENAME=\$(basename "$file")
+                  FILENAME=\$(basename "\$file")
                   echo "Applying migration: ${FILENAME}"
               done
           '''
