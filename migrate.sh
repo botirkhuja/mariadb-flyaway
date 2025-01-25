@@ -5,8 +5,8 @@ ls /tmp/migrations/*.sql | sort | while read -r file; do
     USE db_migrations;
     SELECT COUNT(*) FROM schema_migrations WHERE filename='${FILENAME}';
   " | tail -n 1)
-
-  if [ "${APPLIED}" -eq "0" ]; then
+  echo "APPLIED: ${APPLIED}"
+  if [ APPLIED -eq 0 ]; then
       echo "Applying migration: ${FILENAME}"
       # docker exec -i ${DB_CONTAINER_NAME} mysql -uroot -proot < \$file
       # docker exec -i ${DB_CONTAINER_NAME} mysql -uroot -proot -e "
