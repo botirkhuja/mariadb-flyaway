@@ -67,7 +67,7 @@ pipeline {
     stage('Apply migrations') {
       steps {
         sshagent(credentials: [SSH_CREDENTIALS_ID]) {
-          sh '''#!/bin/bash
+          sh '''
             ssh jenkins@${DATABASES_HOST} <<EOF
               export DB_CONTAINER_NAME=${DB_CONTAINER_NAME}
               export DB_CREDENTIALS_USR=${DB_CREDENTIALS_USR}
@@ -75,7 +75,7 @@ pipeline {
               cd /tmp
               ls -l
               chmod +x migrate.sh
-              ./migrate.sh
+              /tmp/migrate.sh
           '''
         }
       }
