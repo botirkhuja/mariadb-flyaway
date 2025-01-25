@@ -48,7 +48,7 @@ pipeline {
               export DB_CONTAINER_NAME=${DB_CONTAINER_NAME}
               export DB_CREDENTIALS_USR=${DB_CREDENTIALS_USR}
               export DB_CREDENTIALS_PSW=${DB_CREDENTIALS_PSW}
-              docker exec -t ${DB_CONTAINER_NAME} mariadb -u${DB_CREDENTIALS_USR} -p${DB_CREDENTIALS_PSW} -e "
+              docker exec ${DB_CONTAINER_NAME} mariadb -u${DB_CREDENTIALS_USR} -p${DB_CREDENTIALS_PSW} -e "
                 CREATE DATABASE IF NOT EXISTS db_migrations;
                 SHOW databases;
                 USE db_migrations;
@@ -61,10 +61,25 @@ pipeline {
               "
           '''
         }
-        // withCredentials([sshUserPrivateKey(credentialsId: SSH_CREDENTIALS_ID, keyFileVariable: 'SSH_KEY', usernameVariable: 'SSH_USER')]) {
-         
-        //   sshScript remote: [name: 'databases', host: DATABASES_HOST, user: SSH_USER, identityFile: SSH_KEY, allowAnyHosts: true, agent: true], script: "build.sh"
-        // }
+      }
+    }
+    stage('Apply migrations') {
+      steps {
+        sshagent(credentials: [SSH_CREDENTIALS_ID]) {
+          sh '''#!/bin/bash
+            ssh jenkins@${DATABASES_HOST} <<EOF
+              for file in \$(ls /tmp/migrations/*.sql | sort); do
+                  FILENAME=\$(basename \$file)
+                  APPLIED=\$(docker exec -i ${DB_CONTAINER_NAME} mariadb -u${DB_CREDENTIALS_USR} -p${DB_CREDENTIALS_PSW} -e "SELECT COUNT(*) FROM schema_migrations WHERE filename='\$FILENAME';" | tail -n 1)
+                  if [ "\$APPLIED" -eq "0" ]; then
+                      echo "Applying migration: \$FILENAME"
+                      
+                  else
+                      echo "Migration already applied: \$FILENAME"
+                  fi
+                done
+          '''
+        }
       }
     }
   }
