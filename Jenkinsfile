@@ -71,8 +71,8 @@ pipeline {
               ls -l /tmp/migrations/*.sql
               echo "Applying migrations listed above"
               for file in /tmp/migrations/*.sql
-              do
-                  FILENAME=\$(basename "\$file")
+                do
+                  FILENAME="\$file"
                   echo "Applying migration: \$FILENAME"
               done
           '''
