@@ -29,6 +29,7 @@ pipeline {
             sh '''
               scp -r ${MIGRATION_DIR} ${SSH_USER}@${DATABASES_HOST}:/tmp
               scp build.sh ${SSH_USER}@${DATABASES_HOST}:/tmp
+              scp migrate.sh ${SSH_USER}@${DATABASES_HOST}:/tmp
             '''
           }
           // sshCommand remote: [name: 'databases', host: DATABASES_HOST, user: SSH_USER, identityFile: SSH_KEY, allowAnyHosts: true], command: """
@@ -68,11 +69,9 @@ pipeline {
         sshagent(credentials: [SSH_CREDENTIALS_ID]) {
           sh '''#!/bin/bash
             ssh jenkins@${DATABASES_HOST} <<EOF
-              ls -l /tmp/migrations/*.sql
-              echo "Applying migrations listed above"
-              ls /tmp/migrations/*.sql | sort | while read -r file; do
-                echo "Applying migration: \$file"
-              done
+              cd /tmp
+              chmod +x migrate.sh
+              ./migrate.sh
           '''
         }
       }
