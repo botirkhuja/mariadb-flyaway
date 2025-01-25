@@ -70,7 +70,7 @@ pipeline {
             ssh jenkins@${DATABASES_HOST} <<EOF
               cd /tmp/migrations
               ls -1 | sort | while read -r file; do
-                echo "Applying migration: $file"
+                echo "Applying migration: \$file"
               done
           '''
         }
