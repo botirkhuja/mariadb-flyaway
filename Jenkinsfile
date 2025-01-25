@@ -69,6 +69,9 @@ pipeline {
         sshagent(credentials: [SSH_CREDENTIALS_ID]) {
           sh '''#!/bin/bash
             ssh jenkins@${DATABASES_HOST} <<EOF
+              export DB_CONTAINER_NAME=${DB_CONTAINER_NAME}
+              export DB_CREDENTIALS_USR=${DB_CREDENTIALS_USR}
+              export DB_CREDENTIALS_PSW=${DB_CREDENTIALS_PSW}
               cd /tmp
               chmod +x migrate.sh
               ./migrate.sh
