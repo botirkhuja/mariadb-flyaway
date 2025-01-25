@@ -12,3 +12,9 @@ mysql -h ${mariadbAddress} -u${DB_CREDENTIALS_USR} -p${DB_CREDENTIALS_PSW} -e "
                 applied_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
               );
             "
+
+
+            ls -1 | sort | while read -r file; do
+                echo "Applying migration: $file"
+                docker exec ${DB_CONTAINER_NAME} mariadb -u${DB_CREDENTIALS_USR} -p${DB_CREDENTIALS_PSW} db_migrations < $file
+              done
