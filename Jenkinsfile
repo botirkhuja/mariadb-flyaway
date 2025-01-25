@@ -70,10 +70,8 @@ pipeline {
             ssh jenkins@${DATABASES_HOST} <<EOF
               ls -l /tmp/migrations/*.sql
               echo "Applying migrations listed above"
-              for file in /tmp/migrations/*.sql
-                do
-                  FILENAME="\$file"
-                  echo "Applying migration: \$FILENAME"
+              ls /tmp/migrations/*.sql | sort | while read -r file; do
+                echo "Applying migration: \$file"
               done
           '''
         }
