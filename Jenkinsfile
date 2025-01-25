@@ -73,7 +73,7 @@ pipeline {
               for file in /tmp/migrations/*.sql
               do
                   FILENAME=\$(basename "\$file")
-                  echo "Applying migration: \${FILENAME}"
+                  echo "Applying migration: \$FILENAME"
               done
           '''
         }
