@@ -69,9 +69,10 @@ pipeline {
           sh '''#!/bin/bash
             ssh jenkins@${DATABASES_HOST} <<EOF
               cd /tmp/migrations
-              for file in \$(ls | sort); do
-                  FILENAME=\$(basename \$file)
-                  echo "Applying migration: \$FILENAME"
+              for file in /tmp/migrations/*.sql
+              do
+                  FILENAME=\$(basename "$file")
+                  echo "Applying migration: ${FILENAME}"
               done
           '''
         }
