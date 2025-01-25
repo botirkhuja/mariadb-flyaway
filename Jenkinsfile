@@ -74,7 +74,6 @@ pipeline {
               export DB_CREDENTIALS_PSW=${DB_CREDENTIALS_PSW}
               cd /tmp
               ls -l
-              chmod +x migrate.sh
               /tmp/migrate.sh
           '''
         }
