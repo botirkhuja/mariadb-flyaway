@@ -5,14 +5,14 @@ ls /tmp/migrations/*.sql | sort | while read -r file; do
     USE db_migrations;
     SELECT COUNT(*) FROM schema_migrations WHERE filename='${FILENAME}';
   " | tail -n 1)
-  echo "APPLIED: ${APPLIED}"
-  # if [ "${APPLIED}" -eq "0" ]; then
-  #     echo "Applying migration: ${FILENAME}"
-  #     # docker exec -i ${DB_CONTAINER_NAME} mysql -uroot -proot < \$file
-  #     # docker exec -i ${DB_CONTAINER_NAME} mysql -uroot -proot -e "
-  #     # INSERT INTO schema_migrations (filename) VALUES ('\$FILENAME');
-  #     # "
-  # else
-  #     echo "Migration already applied: \$FILENAME"
-  # fi
+
+  if [ "${APPLIED}" -eq "0" ]; then
+      echo "Applying migration: ${FILENAME}"
+      # docker exec -i ${DB_CONTAINER_NAME} mysql -uroot -proot < \$file
+      # docker exec -i ${DB_CONTAINER_NAME} mysql -uroot -proot -e "
+      # INSERT INTO schema_migrations (filename) VALUES ('\$FILENAME');
+      # "
+  else
+      echo "Migration already applied: ${FILENAME}"
+  fi
 done
