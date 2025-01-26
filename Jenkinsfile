@@ -2,6 +2,7 @@ pipeline {
   agent any
   environment {
     DATABASES_HOST = '10.10.10.101'
+    DATABASES_PORT = '3306'
     MIGRATION_DIR = 'migrations'
     DOCKER_IMAGE = 'mariadb:latest'
     SSH_CREDENTIALS_ID = 'databases-ssh-key'
@@ -11,17 +12,18 @@ pipeline {
     MARIADB_CLIENT_IMAGE = 'library/mariadb:10.3'
   }
   stages {
-    stage('test docker agent') {
-      agent {
-        docker {
-          image MARIADB_CLIENT_IMAGE
-          args '-v /var/run/docker.sock:/var/run/docker.sock'
-          reuseNode true
-          name MARIADB_CLIENT_CONTAINER_NAME
-        }
-        steps {
-          sh 'mysql --version'
-        }
+    stage('Run mariadb client container') {
+      steps {
+        sh '''
+          docker run -d --name ${MARIADB_CLIENT_CONTAINER_NAME} -e MYSQL_ROOT_PASSWORD="mypass" ${MARIADB_CLIENT_IMAGE}
+        '''
+      }
+    }
+    stage('Connect to mariadb client container and show databases') {
+      steps {
+        sh '''
+          docker exec ${MARIADB_CLIENT_CONTAINER_NAME} mysql -h ${DATABASES_HOST} -P ${DATABASES_PORT} -u{DB_CREDENTIALS_USR} -p{DB_CREDENTIALS_PSW} -e "SHOW DATABASES;"
+        '''
       }
     }
     // stage('Run mariadb client container') {
