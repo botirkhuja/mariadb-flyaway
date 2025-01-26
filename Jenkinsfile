@@ -12,11 +12,6 @@ pipeline {
     MARIADB_CLIENT_IMAGE = 'library/mariadb:10.3'
   }
   stages {
-    stage ('Checkout') {
-      steps {
-        checkout scm
-      }
-    }
     stage('Run mariadb client container') {
       steps {
         sh '''
@@ -48,10 +43,18 @@ pipeline {
         '''
       }
     }
-
+stage('Debug') {
+  steps {
+    sh 'pwd && ls -la'
+  }
+}
     stage('Apply migrations') {
       steps {
-        sh '${WORKSPACE}/apply-migrations.sh'
+        sh '
+          chmod +x ./apply-migrations.sh
+        '
+        sh 'dos2unix ./apply-migrations.sh'
+        sh './apply-migrations.sh'
       }
     }
 
