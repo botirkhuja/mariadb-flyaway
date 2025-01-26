@@ -47,8 +47,7 @@ pipeline {
     stage('Apply migrations') {
       steps {
         sh '''
-          chmod +x migrate.sh
-          ./migrate.sh
+          ls -l
         '''
       }
     }
