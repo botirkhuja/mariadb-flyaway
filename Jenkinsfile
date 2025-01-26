@@ -54,10 +54,10 @@ pipeline {
             echo "APPLIED: ${APPLIED}"
             if [ ${APPLIED} -eq "0" ]; then
                 echo "Applying migration: ${FILENAME}"
-                # docker exec -i ${DB_CONTAINER_NAME} mysql -uroot -proot < \$file
-                # docker exec -i ${DB_CONTAINER_NAME} mysql -uroot -proot -e "
-                # INSERT INTO schema_migrations (filename) VALUES ('\$FILENAME');
-                # "
+                docker exec -i ${MARIADB_CLIENT_CONTAINER_NAME} mysql -h ${DATABASES_HOST} -P ${DATABASES_PORT} -u${DB_CREDENTIALS_USR} -p${DB_CREDENTIALS_PSW} my-maria-database < \$file
+                docker exec -i ${MARIADB_CLIENT_CONTAINER_NAME} mysql -h ${DATABASES_HOST} -P ${DATABASES_PORT} -u${DB_CREDENTIALS_USR} -p${DB_CREDENTIALS_PSW} db_migrations -e "
+                  INSERT INTO schema_migrations (filename) VALUES ('\$FILENAME');
+                "
             else
                 echo "Migration already applied: ${FILENAME}"
             fi
