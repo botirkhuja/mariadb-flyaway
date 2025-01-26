@@ -12,6 +12,11 @@ pipeline {
     MARIADB_CLIENT_IMAGE = 'library/mariadb:10.3'
   }
   stages {
+    stage ('Checkout') {
+      steps {
+        checkout scm
+      }
+    }
     stage('Run mariadb client container') {
       steps {
         sh '''
