@@ -45,11 +45,11 @@ pipeline {
     }
     stage('Apply migrations') {
       steps {
-        sh '''#!/bin/bash
+        sh '''
           ls ./migrations/*.sql | sort | while read -r file; do
             FILENAME=$(basename "$file")
-            
-            
+            echo "Checking migration: ${FILENAME}"
+
           done
         '''
       }
