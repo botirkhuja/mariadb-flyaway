@@ -43,11 +43,6 @@ pipeline {
         '''
       }
     }
-stage('Debug') {
-  steps {
-    sh 'pwd && ls -la'
-  }
-}
     stage('Apply migrations') {
       steps {
         sh '''#!/bin/bash
