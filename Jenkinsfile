@@ -47,15 +47,8 @@ pipeline {
     stage('Apply migrations') {
       steps {
         sh '''
-          ls ./migrations/*.sql | sort | while read -r file; do
-            FILENAME=$(basename "$file")
-            echo "Applying migration: ${FILENAME}"
-              APPLIED=$(docker exec -i ${MARIADB_CLIENT_CONTAINER_NAME} mysql  -h ${DATABASES_HOST} -P ${DATABASES_PORT} -u${DB_CREDENTIALS_USR} -p${DB_CREDENTIALS_PSW} -e "
-                USE db_migrations;
-                SELECT COUNT(*) FROM schema_migrations WHERE filename='${FILENAME}';
-              ")
-              echo "APPLIED: ${APPLIED}"
-          done
+          chmod +x migrate.sh
+          ./migrate.sh
         '''
       }
     }
