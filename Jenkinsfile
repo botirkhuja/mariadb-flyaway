@@ -50,9 +50,7 @@ stage('Debug') {
 }
     stage('Apply migrations') {
       steps {
-        sh '
-          chmod +x ./apply-migrations.sh
-        '
+        sh 'chmod +x ./apply-migrations.sh'
         sh 'dos2unix ./apply-migrations.sh'
         sh './apply-migrations.sh'
       }
