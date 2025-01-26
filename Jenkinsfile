@@ -118,17 +118,9 @@ pipeline {
   }
   post {
     always {
-      stage('Remove mariadb client container') {
-        steps {
-          sh '''
-            docker stop ${MARIADB_CLIENT_CONTAINER_NAME}
-          '''
-        }
-      }
-      // sh '''
-      //   docker stop ${MARIADB_CLIENT_CONTAINER_NAME}
-      //   docker rm ${MARIADB_CLIENT_CONTAINER_NAME}
-      // '''
+      sh '''
+        docker stop ${MARIADB_CLIENT_CONTAINER_NAME}
+      '''
     }
   }
 }
