@@ -51,10 +51,10 @@ stage('Debug') {
     stage('Apply migrations') {
       steps {
         sh '''#!/bin/bash
-          chmod +x ./apply-migrations.sh
+          chmod +x ${WORKSPACE}/apply-migrations.sh
         '''
         sh '''#!/bin/bash
-        ./apply-migrations.sh
+        ${WORKSPACE}/apply-migrations.sh
         '''
       }
     }
