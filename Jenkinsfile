@@ -49,7 +49,7 @@ pipeline {
           ls ./migrations/*.sql | sort | while read -r file; do
             FILENAME=$(basename "$file")
             echo "Applying migration: ${FILENAME}"
-            APPLIED=$(docker exec -i ${DB_CONTAINER_NAME} mariadb -u${DB_CREDENTIALS_USR} -p${DB_CREDENTIALS_PSW} -e "
+            APPLIED=$(docker exec -i ${MARIADB_CLIENT_CONTAINER_NAME} mysql -h ${DATABASES_HOST} -P ${DATABASES_PORT} -u${DB_CREDENTIALS_USR} -p${DB_CREDENTIALS_PSW} -e "
               USE db_migrations;
               SELECT COUNT(*) FROM schema_migrations WHERE filename='${FILENAME}';
             " | tail -n 1)
