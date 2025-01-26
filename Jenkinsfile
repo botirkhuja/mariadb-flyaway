@@ -46,7 +46,7 @@ pipeline {
 
     stage('Apply migrations') {
       steps {
-        sh '${WORKSPACE}/jenkins/pipeline/mariadb-flyaway_main/apply-migrations.sh'
+        sh '${WORKSPACE}/apply-migrations.sh'
       }
     }
 
