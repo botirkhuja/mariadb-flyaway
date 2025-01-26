@@ -54,7 +54,7 @@ pipeline {
               SELECT COUNT(*) FROM schema_migrations WHERE filename='${FILENAME}';
             " | tail -n 1)
             echo "APPLIED: ${APPLIED}"
-            if [ APPLIED -eq 0 ]; then
+            if [ ${APPLIED} -eq 0 ]; then
                 echo "Applying migration: ${FILENAME}"
                 # docker exec -i ${DB_CONTAINER_NAME} mysql -uroot -proot < \$file
                 # docker exec -i ${DB_CONTAINER_NAME} mysql -uroot -proot -e "
