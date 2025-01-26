@@ -15,7 +15,7 @@ pipeline {
     stage('Run mariadb client container') {
       steps {
         sh '''
-          docker run -d --name ${MARIADB_CLIENT_CONTAINER_NAME} -e MYSQL_ROOT_PASSWORD="mypass" ${MARIADB_CLIENT_IMAGE}
+          docker run --rm -d --name ${MARIADB_CLIENT_CONTAINER_NAME} -e MYSQL_ROOT_PASSWORD="mypass" ${MARIADB_CLIENT_IMAGE}
         '''
       }
     }
@@ -23,6 +23,13 @@ pipeline {
       steps {
         sh '''
           docker exec ${MARIADB_CLIENT_CONTAINER_NAME} mysql -h ${DATABASES_HOST} -P ${DATABASES_PORT} -u{{DB_CREDENTIALS_USR}} -p{{DB_CREDENTIALS_PSW}} -e "SHOW DATABASES;"
+        '''
+      }
+    }
+    stage('Remove mariadb client container') {
+      steps {
+        sh '''
+          docker stop ${MARIADB_CLIENT_CONTAINER_NAME}
         '''
       }
     }
