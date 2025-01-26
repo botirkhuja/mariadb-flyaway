@@ -1,5 +1,5 @@
 #!bin/bash
-ls /tmp/migrations/*.sql | sort | while read -r file; do
+ls ./migrations/*.sql | sort | while read -r file; do
   FILENAME=$(basename "$file")
   echo "Applying migration: ${FILENAME}"
   APPLIED=$(docker exec -i ${DB_CONTAINER_NAME} mariadb -u${DB_CREDENTIALS_USR} -p${DB_CREDENTIALS_PSW} -e "
