@@ -52,7 +52,6 @@ pipeline {
             APPLIED=$(docker exec -i ${MARIADB_CLIENT_CONTAINER_NAME} mysql -h ${DATABASES_HOST} -P ${DATABASES_PORT} -u${DB_CREDENTIALS_USR} -p${DB_CREDENTIALS_PSW} db_migrations -e "
               SELECT COUNT(*) FROM schema_migrations WHERE filename='${FILENAME}';
             " | tail -n 1)
-            echo "APPLIED: ${APPLIED}"
             if [ ${APPLIED} -eq "0" ]; then
                 echo "Applying migration: ${FILENAME}"
                 docker exec -i ${MARIADB_CLIENT_CONTAINER_NAME} mysql -h ${DATABASES_HOST} -P ${DATABASES_PORT} -u${DB_CREDENTIALS_USR} -p${DB_CREDENTIALS_PSW} my-maria-database < \$file
@@ -66,46 +65,6 @@ pipeline {
         '''
       }
     }
-
-  //   stage('Create Migrations Table') {
-  //     steps {
-  //       sshagent(credentials: [SSH_CREDENTIALS_ID]) {
-  //         sh '''#!/bin/bash
-  //           ssh jenkins@${DATABASES_HOST} <<EOF
-  //             cd /tmp
-  //             export DB_CONTAINER_NAME=${DB_CONTAINER_NAME}
-  //             export DB_CREDENTIALS_USR=${DB_CREDENTIALS_USR}
-  //             export DB_CREDENTIALS_PSW=${DB_CREDENTIALS_PSW}
-  //             docker exec ${DB_CONTAINER_NAME} mariadb -u${DB_CREDENTIALS_USR} -p${DB_CREDENTIALS_PSW} -e "
-  //               CREATE DATABASE IF NOT EXISTS db_migrations;
-  //               SHOW databases;
-  //               USE db_migrations;
-  //               CREATE TABLE IF NOT EXISTS schema_migrations (
-  //                 id INT AUTO_INCREMENT PRIMARY KEY,
-  //                 filename VARCHAR(255) NOT NULL UNIQUE,
-  //                 applied_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
-  //               );
-  //               SHOW tables;
-  //             "
-  //         '''
-  //       }
-  //     }
-  //   }
-  //   stage('Apply migrations') {
-  //     steps {
-  //       sshagent(credentials: [SSH_CREDENTIALS_ID]) {
-  //         sh '''#!/bin/bash
-  //           ssh jenkins@${DATABASES_HOST} <<EOF
-  //             export DB_CONTAINER_NAME=${DB_CONTAINER_NAME}
-  //             export DB_CREDENTIALS_USR=${DB_CREDENTIALS_USR}
-  //             export DB_CREDENTIALS_PSW=${DB_CREDENTIALS_PSW}
-  //             cd /tmp
-  //             chmod +x migrate.sh
-  //             ./migrate.sh
-  //         '''
-  //       }
-  //     }
-  //   }
   }
   post {
     always {
