@@ -132,6 +132,20 @@ CREATE TABLE IF NOT EXISTS product_pictures (
     FOREIGN KEY (product_id) REFERENCES products(product_id)
 );
 
+CREATE TABLE IF NOT EXISTS currency_rates (
+    currency_rate_id CHAR(36) PRIMARY KEY,
+    currency_key VARCHAR(3) NOT NULL,
+    currency_rate DECIMAL(10, 4) NOT NULL,
+    currency_name VARCHAR(255) NOT NULL,
+    -- store the date when the exchange rate was last updated
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    is_deleted BOOLEAN DEFAULT FALSE
+);
+
+INSERT INTO currency_rates (currency_rate_id, currency_key, currency_rate, currency_name)
+    VALUES ('2ro', 'USD', '1.00', 'United States Dollar'),
+           ('tr5', 'SUM', '12750', 'Uzbek Som');
+
 CREATE TABLE IF NOT EXISTS orders (
     order_id CHAR(36) PRIMARY KEY,
     client_id CHAR(36) NOT NULL,
@@ -167,18 +181,3 @@ CREATE TABLE IF NOT EXISTS order_items (
     FOREIGN KEY (order_id) REFERENCES orders(order_id),
     FOREIGN KEY (product_id) REFERENCES products(product_id)
 );
-
--- create currency exchange rates table
-CREATE TABLE IF NOT EXISTS currency_rates (
-    currency_rate_id CHAR(36) PRIMARY KEY,
-    currency_key VARCHAR(3) NOT NULL,
-    currency_rate DECIMAL(10, 4) NOT NULL,
-    currency_name VARCHAR(255) NOT NULL,
-    -- store the date when the exchange rate was last updated
-    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-    is_deleted BOOLEAN DEFAULT FALSE
-);
-
-INSERT INTO currency_rates (currency_rate_id, currency_key, currency_rate, currency_name)
-    VALUES ('2ro', 'USD', '1.00', 'United States Dollar'),
-           ('tr5', 'SUM', '12750', 'Uzbek Som');
