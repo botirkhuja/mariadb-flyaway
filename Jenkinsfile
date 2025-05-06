@@ -37,11 +37,21 @@ pipeline {
             }
         }
 
-        stage('Create Migrations Table') {
+        stage('Create migrations database') {
             steps {
                 sh """
-                    mysql -h ${DATABASES_HOST} -P ${DATABASES_PORT} -u${DB_CREDENTIALS_USR} -p${DB_CREDENTIALS_PSW} -e "
+                    mysql -h \$DATABASES_HOST -P \$DATABASES_PORT -u\$DB_CREDENTIALS_USR -p\$DB_CREDENTIALS_PSW -e "
                         CREATE DATABASE IF NOT EXISTS db_migrations;
+                        GRANT ALL PRIVILEGES ON `db_migrations`.* TO '\$DB_CREDENTIALS_USR'@'%';
+                    "
+                """
+            }
+        }
+
+        stage('Use migrations database and create migrations table') {
+            steps {
+                sh """
+                    mysql -h \$DATABASES_HOST -P \$DATABASES_PORT -u\$DB_CREDENTIALS_USR -p\$DB_CREDENTIALS_PSW -e "
                         USE db_migrations;
                         CREATE TABLE IF NOT EXISTS schema_migrations (
                             id INT AUTO_INCREMENT PRIMARY KEY,
