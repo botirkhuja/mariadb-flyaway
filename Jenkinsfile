@@ -20,17 +20,17 @@ pipeline {
         //     '''
         //   }
         // }
-        stage('Configure mariadb cnf file with username and password') {
+        stage('Make shell script executable') {
             steps {
                 sh '''
-                    echo "[client]
-                    user=root
-                    password=mypass" > /etc/my.cnf
+                    chmod +x ./config_mariadb.sh
                 '''
             }
+        }
+        stage('Execute config shell script') {
             steps {
                 sh '''
-                    cat /etc/my.cnf
+                    ./config_mariadb.sh
                 '''
             }
         }
