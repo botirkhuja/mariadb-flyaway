@@ -28,7 +28,7 @@ pipeline {
                     --port=\$DATABASES_PORT \
                     -user=\$DB_CREDENTIALS_USR \
                     -password=\$DB_CREDENTIALS_PSW \
-                    my-maria-database'
+                    my-maria-database
                 """
             }
         }
