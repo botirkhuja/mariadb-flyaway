@@ -1,4 +1,4 @@
-for file in \$(ls ./migrations/*.sql | sort); do
+for file in $(ls ./migrations/*.sql | sort); do
             FILENAME=$(basename "$file")
             echo "Checking migration: ${FILENAME}"
             APPLIED=$(mysql my-maria-database -e "
