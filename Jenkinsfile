@@ -36,29 +36,26 @@ pipeline {
         }
         stage('Connect to databases') {
             steps {
-                sh """
-                    mysql \
-                    --host=\$DATABASES_HOST \
-                    --port=\$DATABASES_PORT \
-                    --user=\$DB_CREDENTIALS_USR \
-                    --password=\$DB_CREDENTIALS_PSW \
-                    my-maria-database
-                """
+                sh '''
+                    mysql my-maria-database -e "
+                        SHOW TABLES;
+                    "
+                '''
             }
         }
-        stage('Show tables') {
-            steps {
-                sh """
-                    mysql \
-                    --host=\$DATABASES_HOST \
-                    --port=\$DATABASES_PORT \
-                    --user=\$DB_CREDENTIALS_USR \
-                    --password=\$DB_CREDENTIALS_PSW \
-                    my-maria-database
-                    -e "SHOW TABLES;"
-                """
-            }
-        }
+        // stage('Show tables') {
+        //     steps {
+        //         sh """
+        //             mysql \
+        //             --host=\$DATABASES_HOST \
+        //             --port=\$DATABASES_PORT \
+        //             --user=\$DB_CREDENTIALS_USR \
+        //             --password=\$DB_CREDENTIALS_PSW \
+        //             my-maria-database
+        //             -e "SHOW TABLES;"
+        //         """
+        //     }
+        // }
 
         stage('create migrations table') {
             steps {
