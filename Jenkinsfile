@@ -10,10 +10,6 @@ pipeline {
     environment {
         DATABASES_HOST = '192.168.50.226'
         DATABASES_PORT = '3306'
-        MIGRATION_DIR = 'migrations'
-        DOCKER_IMAGE = 'mariadb:latest'
-        SSH_CREDENTIALS_ID = 'databases-ssh-key'
-        DB_CONTAINER_NAME = 'prod-mariadb'
         DB_CREDENTIALS = credentials('mariadb-credentials')
     }
     stages {
@@ -24,16 +20,21 @@ pipeline {
         //     '''
         //   }
         // }
-        stage('Show databases') {
+        stage('Connect to databases') {
             steps {
                 sh """
                     mysql \
-                    -h \$DATABASES_HOST \
-                    -P \$DATABASES_PORT \
-                    -u\$DB_CREDENTIALS_USR \
-                    -p\$DB_CREDENTIALS_PSW \
-                    -e 'SHOW DATABASES;'
+                    --host=\$DATABASES_HOST \
+                    --port=\$DATABASES_PORT \
+                    -user=\$DB_CREDENTIALS_USR \
+                    -password=\$DB_CREDENTIALS_PSW \
+                    my-maria-database'
                 """
+            }
+        }
+        stage('Show tables') {
+            steps {
+                sh 'SHOW TABLES;'
             }
         }
 
