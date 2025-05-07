@@ -20,6 +20,20 @@ pipeline {
         //     '''
         //   }
         // }
+        stage('Configure mariadb cnf file with username and password') {
+            steps {
+                sh '''
+                    echo "[client]
+                    user=root
+                    password=mypass" > /etc/my.cnf
+                '''
+            }
+            steps {
+                sh '''
+                    cat /etc/my.cnf
+                '''
+            }
+        }
         stage('Connect to databases') {
             steps {
                 sh """
@@ -34,7 +48,15 @@ pipeline {
         }
         stage('Show tables') {
             steps {
-                sh 'SHOW TABLES;'
+                sh """
+                    mysql \
+                    --host=\$DATABASES_HOST \
+                    --port=\$DATABASES_PORT \
+                    --user=\$DB_CREDENTIALS_USR \
+                    --password=\$DB_CREDENTIALS_PSW \
+                    my-maria-database
+                    -e "SHOW TABLES;"
+                """
             }
         }
 
