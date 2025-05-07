@@ -1,4 +1,4 @@
-SHOW tables;
+-- SHOW tables;
 
 -- SELECT * FROM phone_number_types;
 

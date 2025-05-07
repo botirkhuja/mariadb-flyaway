@@ -4,5 +4,3 @@ echo "[client]
   host=${DATABASES_HOST}
   port=${DATABASES_PORT}
 " > /etc/my.cnf
-
-cat /etc/my.cnf

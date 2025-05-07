@@ -27,14 +27,14 @@
 
 -- END;
 
-CREATE OR REPLACE TRIGGER create_clients_change_history BEFORE UPDATE ON clients FOR EACH ROW BEGIN
+CREATE TRIGGER create_clients_change_history BEFORE UPDATE ON clients FOR EACH ROW BEGIN
 INSERT INTO
     clients_change_history (client_id, name, is_deleted, created_at, updated_at)
 VALUES
     (OLD.client_id, OLD.name, OLD.is_deleted, OLD.created_at, OLD.updated_at);
 END;
 
-CREATE OR REPLACE TRIGGER update_picture_insert_order_number BEFORE INSERT ON pictures FOR EACH ROW BEGIN DECLARE current_picture_order_number INT;
+CREATE TRIGGER update_picture_insert_order_number BEFORE INSERT ON pictures FOR EACH ROW BEGIN DECLARE current_picture_order_number INT;
 -- -- Check if the order_number record exists
 SELECT
     order_number INTO current_picture_order_number
