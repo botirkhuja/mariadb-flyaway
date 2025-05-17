@@ -1,5 +1,5 @@
 DELIMITER //
-CREATE TRIGGER create_clients_change_history BEFORE UPDATE ON clients FOR EACH ROW BEGIN
+CREATE OR REPLACE TRIGGER create_clients_change_history BEFORE UPDATE ON clients FOR EACH ROW BEGIN
 INSERT INTO
     clients_change_history (client_id, name, is_deleted, created_at, updated_at)
 VALUES
