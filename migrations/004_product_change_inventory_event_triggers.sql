@@ -1,8 +1,8 @@
 CREATE TRIGGER create_product_change_history BEFORE UPDATE ON products FOR EACH ROW BEGIN
 INSERT INTO
-    products_change_history (product_id, name, description is_deleted, created_at, updated_at)
+    products_change_history (product_id, name, description, is_deleted, created_at, updated_at)
 VALUES
-    (OLD.client_id, OLD.name, OLD.description, OLD.is_deleted, OLD.created_at, OLD.updated_at);
+    (OLD.product_id, OLD.name, OLD.description, OLD.is_deleted, OLD.created_at, OLD.updated_at);
 END;
 
 CREATE TRIGGER update_invetory_insert_quantity AFTER INSERT ON order_items FOR EACH ROW BEGIN DECLARE current_quantity, current_order_type, sales_order_type INT;
