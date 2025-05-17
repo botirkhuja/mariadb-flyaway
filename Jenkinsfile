@@ -58,6 +58,16 @@ pipeline {
             }
         }
 
+        stage('show migrations table') {
+            steps {
+                sh '''
+                    mysql my-maria-database -e "
+                        SELECT * FROM schema_migrations;
+                    "
+                '''
+            }
+        }
+
         stage('Apply migrations') {
             steps {
                 sh '''
