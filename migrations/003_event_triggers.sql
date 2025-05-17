@@ -7,7 +7,7 @@ VALUES
 END;
 //
 
-CREATE TRIGGER OR REPLACE update_picture_insert_order_number BEFORE INSERT ON pictures FOR EACH ROW BEGIN DECLARE current_picture_order_number INT;
+CREATE OR REPLACE TRIGGER update_picture_insert_order_number BEFORE INSERT ON pictures FOR EACH ROW BEGIN DECLARE current_picture_order_number INT;
 -- -- Check if the order_number record exists
 SELECT
     order_number INTO current_picture_order_number
