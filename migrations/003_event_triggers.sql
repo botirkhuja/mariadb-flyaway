@@ -7,7 +7,7 @@ VALUES
 END;
 //
 
-CREATE TRIGGER update_picture_insert_order_number BEFORE INSERT ON pictures FOR EACH ROW BEGIN DECLARE current_picture_order_number INT;
+CREATE TRIGGER OR REPLACE update_picture_insert_order_number BEFORE INSERT ON pictures FOR EACH ROW BEGIN DECLARE current_picture_order_number INT;
 -- -- Check if the order_number record exists
 SELECT
     order_number INTO current_picture_order_number
@@ -31,7 +31,8 @@ END IF;
 END;
 
 //
-DELIMITER;
+    
+DELIMITER ;
 
 -- Create trigger that updates the lower_case_name column when a new client is inserted
 -- CREATE OR REPLACE TRIGGER update_client_lower_case_name BEFORE INSERT ON clients FOR EACH ROW BEGIN
